@@ -4,6 +4,7 @@ import imp
 import os
 import pymongo
 import sh
+from datetime import datetime
 
 NOT_FOUND = "Not found"
 PATH = "/home/william/error_logger"
@@ -34,7 +35,8 @@ def add_database_entry(commit_hash, exception_type, exception_value, the_traceba
     error_collection.insert_one({"commit": commit_hash,
                                  "exception_type": str(exception_type),
                                  "exception_value": str(exception_value),
-                                 "formatted_exception": traceback.format_exception(exception_type, exception_value, the_traceback)})
+                                 "formatted_exception": traceback.format_exception(exception_type, exception_value, the_traceback),
+                                 "time": datetime.utcnow()})
     # sh.mongod("--dbpath", PATH + "/mongo_data", "--shutdown")
 
 def exception_handler(type, value, tb):
